@@ -1,5 +1,5 @@
 {
-  "name": "urn",
+  "name": "ashes-urn",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
@@ -9,5 +9,13 @@
     "typescript": "^5.0.0"
   },
   "version": "1.0.0",
-  "codename": "SpiritFarer"
+  "codename": "SpiritFarer",
+  "dependencies": {
+    "@elysiajs/swagger": "^1.0.5",
+    "databridge-pack": "^1.0.0",
+    "elysia": "^1.0.27",
+    "mongodb": "^6.8.0",
+    "redis": "^4.6.15",
+    "toolbx": "^1.1.1"
+  }
 }
