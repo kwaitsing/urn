@@ -4,9 +4,9 @@ import Elysia from "elysia";
 
 export const load_app = async (app: Elysia, debug: boolean = false) => {
     // Load extensions first
-    const externalModules = await readdir(`${import.meta.dir}/../../../app/external`)
+    const externalModules = await readdir(`${import.meta.dir}/../../../src/app/external`)
     for (const module of externalModules) {
-        const loader = await import(`${import.meta.dir}/../../../app/external/${module}/loader.ts`)
+        const loader = await import(`${import.meta.dir}/../../../src/app/external/${module}/loader.ts`)
         if (typeof loader.loader === 'function') {
             if (debug) logger(`[APP Loader] > Loading (external) ${module}`, 4)
             await loader.loader(app)
@@ -16,9 +16,9 @@ export const load_app = async (app: Elysia, debug: boolean = false) => {
         }
     }
     // Load internal then
-    const internalModules = await readdir(`${import.meta.dir}/../../../app/internal`)
+    const internalModules = await readdir(`${import.meta.dir}/../../../src/app/internal`)
     for (const module of internalModules) {
-        const loader = await import(`${import.meta.dir}/../../../app/internal/${module}/loader.ts`)
+        const loader = await import(`${import.meta.dir}/../../../src/app/internal/${module}/loader.ts`)
         if (typeof loader.loader === 'function') {
             if (debug) logger(`[APP Loader] > Loading (internal) ${module}`, 4)
             await loader.loader(app)

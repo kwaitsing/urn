@@ -5,10 +5,15 @@ import { load_app } from "./utils/load_app";
 import { connectCache, connectDatabase } from "databridge-pack";
 import { Dbi, CDbi } from "./utils/interface";
 import { load_route } from "./utils/load_route";
+import { ip } from "elysia-ip";
 
-class URN {
+export class URN {
+    debug: boolean
+    constructor(debug: boolean = false) {
+        this.debug = debug
+    }
     async loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) |  ((...args: any[]) => any)) {
-        load_route(route, app, gateway)
+        load_route(route, app, gateway, this.debug)
     }
     async db(url: string, db: string) {
         const client = await connectDatabase(url)
@@ -25,8 +30,9 @@ class URN {
         let server = new Elysia
 
         server.use(swagger())
+        server.use(ip())
 
-        await load_app(server, conf.debug)
+        await load_app(server, this.debug)
 
         server.onError(({ code }) => {
             if (code === 'VALIDATION') {
@@ -47,5 +53,4 @@ class URN {
     }
 
 }
-
-export const urn = new URN
+export * from './type'

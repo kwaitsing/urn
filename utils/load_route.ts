@@ -1,5 +1,5 @@
-import Elysia, { t, type HTTPMethod } from "elysia";
-import type { Result, RuntimeRoute, Request } from "../type";
+import Elysia, { t } from "elysia";
+import type { Result, RuntimeRoute } from "../type";
 import { logger } from "toolbx";
 
 export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false) => {
@@ -10,15 +10,15 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
         ...obj.addon,
         response: t.Object({
           status: t.String(),
-          data: t.Optional(t.Object(t.Any()))
+          data: t.Optional(t.Any())
         }),
         detail: {
           tags: obj.tags
         }
       }
       if (index == -1) {
-        const allowMethods = ['get', 'delete', 'post']
-        if (!allowMethods.includes(obj.method)) throw new Error("Unknown methods" + obj.method);
+        const allowMethods = ['get', 'delete', 'post', 'all']
+        if (!allowMethods.includes(obj.method)) throw new Error("Unknown methods " + obj.method);
         // @ts-ignore
         app[obj.method](obj.path, async (contents) => {
           try {
