@@ -6,4 +6,4 @@
 
 (I couldn't find the bun emoji so i use a hamburger instead, after all, emoji is the npmjs spirit)
 
-Read more at the ![project site](https://urn.lolitapi.cyou)
+Read more at the [project site](https://urn.lolitapi.cyou)
