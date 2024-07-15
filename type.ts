@@ -1,3 +1,5 @@
+import type { Context } from "elysia"
+
 export interface ignObj {
     listen: string,
     port: number
@@ -7,6 +9,14 @@ export interface Result {
     status: string,
     data?: any
 }
+
+export interface Request extends Context {
+    ip: {
+        address: string
+        family: string
+        port: number
+    }
+};
 
 export interface RuntimeRoute {
     method: string

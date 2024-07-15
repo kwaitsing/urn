@@ -1,4 +1,4 @@
-import Elysia, { t, type Context } from "elysia";
+import Elysia, { t } from "elysia";
 import type { Result, RuntimeRoute } from "../type";
 import { logger } from "toolbx";
 
