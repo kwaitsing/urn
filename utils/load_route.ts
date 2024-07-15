@@ -1,5 +1,5 @@
 import Elysia, { t } from "elysia";
-import type { Result, RuntimeRoute } from "../type";
+import type { Request, Result, RuntimeRoute } from "../type";
 import { logger } from "toolbx";
 
 export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false) => {
@@ -20,7 +20,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
         const allowMethods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head', 'connect', 'trace', 'all']
         if (!allowMethods.includes(obj.method)) throw new Error("Unknown methods " + obj.method);
         // @ts-ignore
-        app[obj.method](obj.path, async (contents: Context) => {
+        app[obj.method](obj.path, async (contents: Request) => {
           try {
             // log this api access to the console
             const date = Math.floor(new Date().getTime() / 1000);
