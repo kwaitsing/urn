@@ -18,6 +18,9 @@ export class URN {
     args() {
         return require('minimist')(Bun.argv)
     }
+    env() {
+        return process.env
+    }
     async db(url: string, db: string) {
         const client = await connectDatabase(url)
         const dbi = new Dbi(db, client)
