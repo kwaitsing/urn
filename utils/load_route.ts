@@ -5,7 +5,7 @@ import { logger } from "toolbx";
 export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false) => {
   try {
     routes.forEach((obj) => {
-      const index = app.routes.findIndex(route => route.path === obj.path);
+      const index = app.routes.findIndex(route => (route.path === obj.path && route.method === obj.method));
       obj.addon = {
         ...obj.addon,
         response: t.Object({
