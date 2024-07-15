@@ -17,7 +17,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
         }
       }
       if (index == -1) {
-        const allowMethods = ['get', 'delete', 'post', 'all']
+        const allowMethods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head', 'connect', 'trace', 'all']
         if (!allowMethods.includes(obj.method)) throw new Error("Unknown methods " + obj.method);
         // @ts-ignore
         app[obj.method](obj.path, async (contents) => {
