@@ -60,3 +60,4 @@ export class URN {
 
 }
 export * from './type'
+export * from 'elysia'
