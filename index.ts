@@ -15,6 +15,9 @@ export class URN {
     async loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) |  ((...args: any[]) => any)) {
         load_route(route, app, gateway, this.debug)
     }
+    args() {
+        return require('minimist')(Bun.argv)
+    }
     async db(url: string, db: string) {
         const client = await connectDatabase(url)
         const dbi = new Dbi(db, client)
