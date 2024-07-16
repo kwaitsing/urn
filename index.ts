@@ -61,3 +61,5 @@ export class URN {
 }
 export * from './type'
 export * from 'elysia'
+export * from 'mongodb'
+export * from 'redis'
