@@ -1,7 +1,7 @@
 import type { Context } from "elysia"
 
 export interface ignObj {
-    listen: string,
+    listen?: string,
     port: number
 }
 

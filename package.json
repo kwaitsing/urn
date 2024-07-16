@@ -8,8 +8,8 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "version": "41.0.4",
-  "codename": "SpiritFarer",
+  "version": "41.0.5",
+  "codename": "Aurora",
   "dependencies": {
     "@elysiajs/swagger": "^1.0.5",
     "databridge-pack": "^1.0.0",
