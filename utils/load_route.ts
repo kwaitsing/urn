@@ -1,5 +1,5 @@
 import Elysia, { t } from "elysia";
-import type { Request, Result, RuntimeRoute } from "../type";
+import type { RequestOPT, Result, RuntimeRoute } from "../type";
 import { logger } from "toolbx";
 
 export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false) => {
@@ -8,10 +8,6 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
       const index = app.routes.findIndex(route => (route.path === obj.path && route.method.toLowerCase() === obj.method));
       obj.addon = {
         ...obj.addon,
-        response: t.Object({
-          status: t.String(),
-          data: t.Optional(t.Any())
-        }),
         detail: {
           tags: obj.tags
         }
@@ -20,7 +16,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
         const allowMethods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head', 'connect', 'trace', 'all']
         if (!allowMethods.includes(obj.method)) throw new Error("Unknown methods " + obj.method);
         // @ts-ignore
-        app[obj.method](obj.path, async (contents: Request) => {
+        app[obj.method](obj.path, async (contents: RequestOPT) => {
           try {
             // log this api access to the console
             const date = Math.floor(new Date().getTime() / 1000);
@@ -29,7 +25,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
             if (obj.isDirect) {
               return await obj.handler(contents)
             } else {
-              return await gateway(contents, (contents: any) => obj.handler(contents))
+              return await gateway(contents, obj, (contents: any) => obj.handler(contents))
             }
           } catch (error) {
             let errMsg = String(error);

@@ -1,6 +1,6 @@
 import swagger from "@elysiajs/swagger";
 import Elysia from "elysia";
-import type { ignObj, Result, RuntimeRoute } from "./type";
+import type { ignObj, RuntimeRoute } from "./type";
 import { load_app } from "./utils/load_app";
 import { connectCache, connectDatabase } from "databridge-pack";
 import { Dbi, CDbi } from "./utils/interface";
@@ -12,7 +12,7 @@ export class URN {
     constructor(debug: boolean = false) {
         this.debug = debug
     }
-    async loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) |  ((...args: any[]) => any)) {
+    loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<any>) |  ((...args: any[]) => any)) {
         load_route(route, app, gateway, this.debug)
     }
     args() {

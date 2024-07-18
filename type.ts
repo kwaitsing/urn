@@ -10,7 +10,7 @@ export interface Result {
     data?: any
 }
 
-export interface Request extends Context {
+export interface RequestOPT extends Context {
     ip: {
         address: string
         family: string
@@ -22,7 +22,12 @@ export interface RuntimeRoute {
     method: string
     path: string
     isDirect: boolean
-    handler: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any) // Either a async function or a default one
+    handler: ((...args: any[]) => Promise<any>) | ((...args: any[]) => any) // Either a async function or a default one
     tags?: string[]
     addon?: object
+    [key: string]: any
+}
+
+export interface ObjectAny {
+    [key: string]: any
 }
