@@ -23,8 +23,7 @@ export class Dbi {
     async del(collection: string, objectID: ObjectId): Promise<DeleteResult> {
         return await this.client.db(this.db).collection(collection).deleteOne({ _id: objectID })
     }
-    async get(collection: string, queryObject: ObjectAny , quantity: number = 1, sort: boolean = false, skip: number = 0, user_uuid?: ObjectId): Promise<WithId<object>[] | null[]> {
-        if (user_uuid) queryObject.user_uuid = user_uuid
+    async get(collection: string, queryObject: ObjectAny , quantity: number = 1, sort: boolean = false, skip: number = 0): Promise<WithId<object>[] | null[]> {
         let document: WithId<object>[] | null = [];
         let cursor = this.client.db(this.db).collection(collection).find(queryObject, {
             limit: (quantity === -1) ? undefined : quantity,
