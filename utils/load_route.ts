@@ -25,7 +25,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
             if (obj.isDirect) {
               return await obj.handler(contents)
             } else {
-              return await gateway(contents, obj, (contents: any) => obj.handler(contents))
+              return await gateway(contents, obj, (...args: any[]) => obj.handler(...args))
             }
           } catch (error) {
             let errMsg = String(error);
