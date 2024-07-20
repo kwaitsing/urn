@@ -37,15 +37,6 @@ export class URN {
 
         server.use(swagger())
         server.use(ip())
-        server.onError(({ code }) => {
-            return {
-                status: 'er',
-                data: {
-                    msg: 'Invaild request',
-                    code: code
-                }
-            }
-        })
 
         await load_app(server, this.debug)
 
