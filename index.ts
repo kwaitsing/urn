@@ -12,7 +12,7 @@ export class URN {
     constructor(debug: boolean = false) {
         this.debug = debug
     }
-    loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<any>) |  ((...args: any[]) => any)) {
+    loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<any>) | ((...args: any[]) => any)) {
         load_route(route, app, gateway, this.debug)
     }
     args() {
@@ -26,7 +26,7 @@ export class URN {
         const dbi = new Dbi(db, client)
         return dbi
     }
-    async cdb(url:string) {
+    async cdb(url: string) {
         const client = await connectCache(url)
         const cdbi = new CDbi(client)
         return cdbi
@@ -37,19 +37,17 @@ export class URN {
 
         server.use(swagger())
         server.use(ip())
-
-        await load_app(server, this.debug)
-
         server.onError(({ code }) => {
-            if (code === 'VALIDATION') {
-                return {
-                    status: 'er',
-                    data: {
-                        msg: 'Invaild request'
-                    }
+            return {
+                status: 'er',
+                data: {
+                    msg: 'Invaild request',
+                    code: code
                 }
             }
         })
+
+        await load_app(server, this.debug)
 
         server.listen({
             hostname: conf.listen,
