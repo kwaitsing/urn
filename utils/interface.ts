@@ -2,7 +2,7 @@
 import { Collection, type CollectionInfo, type DeleteResult, type InsertOneResult, MongoClient, ObjectId, type UpdateResult, type WithId } from 'mongodb'
 import type { ObjectAny } from '../type'
 
-const sanitize = (object: ObjectAny) => {
+export const sanitize = (object: ObjectAny) => {
     if (object instanceof Object) {
         for (const key in object) {
             if (/^\$/.test(key)) {
