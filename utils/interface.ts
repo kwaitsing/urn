@@ -23,15 +23,15 @@ export class Dbi {
         this.db = db
         this.client = client
     }
-    async add(collection: string, object: object): Promise<InsertOneResult> {
-        const safeObj = sanitize(object)
+    async add(collection: string, object: object, doSanitize: boolean = true): Promise<InsertOneResult> {
+        const safeObj = doSanitize ? sanitize(object) : object
         return await this.client.db(this.db).collection(collection).insertOne(safeObj)
     }
-    async upd(collection: string, objectID: ObjectId, updateObject: object): Promise<UpdateResult> {
+    async upd(collection: string, objectID: ObjectId, updateObject: object, doSanitize: boolean = true): Promise<UpdateResult> {
         if (!ObjectId.isValid(objectID)) {
             throw new Error('Invalid ObjectId');
         }
-        const safeObj = sanitize(updateObject)
+        const safeObj = doSanitize ? sanitize(updateObject) : updateObject
         return await this.client.db(this.db).collection(collection).updateOne({
             _id: objectID
         }, {
@@ -65,6 +65,9 @@ export class Dbi {
     async getCollection(): Promise<(CollectionInfo | Pick<CollectionInfo, "name" | "type">)[]> {
         return await this.client.db(this.db).listCollections().toArray()
     }
+    custom() {
+        return this.client.db(this.db)
+    }
 }
 
 export class CDbi {
@@ -81,5 +84,8 @@ export class CDbi {
     }
     async delete(set: string, key: string) {
         return await this.cdb.hDel(set, key)
+    }
+    custom() {
+        return this.cdb
     }
 }

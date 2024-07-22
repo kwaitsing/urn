@@ -8,7 +8,7 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "version": "41.1.13",
+  "version": "41.1.16",
   "codename": "Aurora",
   "dependencies": {
     "@elysiajs/swagger": "latest",
