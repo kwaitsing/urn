@@ -47,10 +47,10 @@ export class Dbi {
         }
         return await this.client.db(this.db).collection(collection).deleteOne({ _id: objectID })
     }
-    async get(collection: string, queryObject: ObjectAny, optObject: MongoIntFind): Promise<WithId<object>[] | null[]> {
+    async get(collection: string, queryObject: ObjectAny, optObject?: MongoIntFind): Promise<WithId<object>[] | null[]> {
 
         let doSanitize: boolean = true
-        if (optObject.doSanitize) doSanitize = optObject.doSanitize
+        if (optObject?.doSanitize) doSanitize = optObject.doSanitize
         const safeObj = doSanitize ? sanitize(queryObject) : queryObject
 
         let document: WithId<object>[] | null = [];
