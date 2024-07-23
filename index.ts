@@ -6,7 +6,7 @@ import { connectCache, connectDatabase } from "databridge-pack";
 import { Dbi, CDbi } from "./utils/interface";
 import { load_route } from "./utils/load_route";
 import { ip } from "elysia-ip";
-import type { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export class URN {
     debug: boolean
@@ -53,7 +53,7 @@ export class URN {
 }
 
 export const toObjId = (input: any): ObjectId => {
-    return input as ObjectId
+    return new ObjectId(input)
 }
 
 export * from './type'
