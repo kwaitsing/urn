@@ -31,12 +31,14 @@ export class URN {
         const cdbi = new CDbi(client)
         return cdbi
     }
-    async ignite(conf: ignObj): Promise<Elysia> {
+    async ignite(conf: ignObj, loader?: (server: Elysia) => any): Promise<Elysia> {
         // Create Elysia Core Instance
         let server = new Elysia
 
         server.use(swagger())
         server.use(ip())
+
+        if (loader) await loader(server)
 
         await load_app(server, this.debug)
 

@@ -5,6 +5,9 @@ import type { ObjectAny } from '../type'
 export const sanitize = (object: ObjectAny) => {
     if (object instanceof Object) {
         for (const key in object) {
+            if (key === '_id' && typeof object[key] === 'string') {
+                object[key] = new ObjectId(object[key])
+            }
             if (/^\$/.test(key)) {
                 delete object[key];
             } else {
