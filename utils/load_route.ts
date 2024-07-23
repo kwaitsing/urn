@@ -9,7 +9,7 @@ export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...ar
       obj.addon = {
         ...obj.addon,
         detail: {
-          tags: [module_name]
+          tags: [module_name ? module_name : 'Uncataloged']
         }
       }
       if (index == -1) {
