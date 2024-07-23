@@ -1,4 +1,5 @@
 import type { Context } from "elysia"
+import type { FindOptions } from "mongodb"
 
 export interface ignObj {
     listen?: string,
@@ -30,4 +31,8 @@ export interface RuntimeRoute {
 
 export interface ObjectAny {
     [key: string]: any
+}
+
+export interface MongoIntFind extends FindOptions {
+    doSanitize: boolean
 }

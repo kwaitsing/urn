@@ -1,6 +1,6 @@
 // This file is responsible for interact with the MongoDB and redis, you may call it a wrapper or an interface
 import { Collection, type CollectionInfo, type DeleteResult, type InsertOneResult, MongoClient, ObjectId, type UpdateResult, type WithId } from 'mongodb'
-import type { ObjectAny } from '../type'
+import type { MongoIntFind, ObjectAny } from '../type'
 
 export const sanitize = (object: ObjectAny) => {
     if (object instanceof Object) {
@@ -47,16 +47,15 @@ export class Dbi {
         }
         return await this.client.db(this.db).collection(collection).deleteOne({ _id: objectID })
     }
-    async get(collection: string, queryObject: ObjectAny, quantity: number = 1, sort: boolean = false, skip: number = 0, doSanitize: boolean = true): Promise<WithId<object>[] | null[]> {
+    async get(collection: string, queryObject: ObjectAny, optObject: MongoIntFind): Promise<WithId<object>[] | null[]> {
 
+        let doSanitize: boolean = true
+        if (optObject.doSanitize) doSanitize = optObject.doSanitize
         const safeObj = doSanitize ? sanitize(queryObject) : queryObject
 
         let document: WithId<object>[] | null = [];
-        let cursor = this.client.db(this.db).collection(collection).find(safeObj, {
-            limit: (quantity === -1) ? undefined : quantity,
-            sort: sort ? { _id: -1 } : undefined,
-            skip: skip
-        })
+
+        let cursor = this.client.db(this.db).collection(collection).find(safeObj, optObject)
         for await (let docu of cursor) {
             document.push(docu)
         }
