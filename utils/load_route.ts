@@ -2,14 +2,14 @@ import Elysia, { t } from "elysia";
 import type { RequestOPT, Result, RuntimeRoute } from "../type";
 import { logger } from "toolbx";
 
-export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false) => {
+export const load_route = (routes: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<Result>) | ((...args: any[]) => any), debug: boolean = false, module_name?: string) => {
   try {
     routes.forEach((obj) => {
       const index = app.routes.findIndex(route => (route.path === obj.path && route.method.toLowerCase() === obj.method));
       obj.addon = {
         ...obj.addon,
         detail: {
-          tags: obj.tags
+          tags: [module_name]
         }
       }
       if (index == -1) {

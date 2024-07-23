@@ -12,8 +12,8 @@ export class URN {
     constructor(debug: boolean = false) {
         this.debug = debug
     }
-    loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<any>) | ((...args: any[]) => any)) {
-        load_route(route, app, gateway, this.debug)
+    loadRoute(route: RuntimeRoute[], app: Elysia, gateway: ((...args: any[]) => Promise<any>) | ((...args: any[]) => any), module_name?: string) {
+        load_route(route, app, gateway, this.debug, module_name)
     }
     args() {
         return require('minimist')(Bun.argv)
