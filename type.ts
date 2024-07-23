@@ -34,5 +34,5 @@ export interface ObjectAny {
 }
 
 export interface MongoIntFind extends FindOptions {
-    doSanitize: boolean
+    doSanitize?: boolean
 }
