@@ -47,7 +47,7 @@ export class Dbi {
     async get(collection: string, queryObject: ObjectAny, optObject?: MongoIntFind): Promise<WithId<object>[] | null[]> {
 
         let doSanitize: boolean = true
-        if (optObject?.doSanitize) doSanitize = optObject.doSanitize
+        if (optObject?.doSanitize !== undefined) doSanitize = optObject.doSanitize
         const safeObj = doSanitize ? sanitize(queryObject) : queryObject
 
         let document: WithId<object>[] | null = [];
