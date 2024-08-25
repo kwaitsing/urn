@@ -16,17 +16,33 @@ export const sanitize = (object: ObjectAny) => {
 }
 
 export class Dbi {
-    db: string
-    client: MongoClient
+    private db: string
+    private client: MongoClient
 
     constructor(db: string, client: MongoClient) {
         this.db = db
         this.client = client
     }
+    /**
+     * 
+     * @param collection - The collection you want to operate with
+     * @param object - the object you want to write
+     * @param doSanitize - do Sanitize or not (true by default)
+     * @returns 
+     */
     async add(collection: string, object: object, doSanitize: boolean = true): Promise<InsertOneResult> {
         const safeObj = doSanitize ? sanitize(object) : object
         return await this.client.db(this.db).collection(collection).insertOne(safeObj)
     }
+
+    /**
+     * 
+     * @param collection  - The collection you want to operate with
+     * @param objectID - remember to use toObjId() to ensure you're passing ObjectID
+     * @param updateObject - Object you want to update
+     * @param doSanitize - do Sanitize or not (true by default)
+     * @returns 
+     */
     async upd(collection: string, objectID: ObjectId, updateObject: object, doSanitize: boolean = true): Promise<UpdateResult> {
         if (!ObjectId.isValid(objectID)) {
             throw new Error('Invalid ObjectId');
@@ -38,23 +54,36 @@ export class Dbi {
             $set: safeObj
         })
     }
+    /**
+     * 
+     * @param collection - The collection you want to operate with
+     * @param objectID - remember to use toObjId() to ensure you're passing ObjectID
+     * @returns 
+     */
     async del(collection: string, objectID: ObjectId): Promise<DeleteResult> {
         if (!ObjectId.isValid(objectID)) {
             throw new Error('Invalid ObjectId');
         }
         return await this.client.db(this.db).collection(collection).deleteOne({ _id: objectID })
     }
-    async get(collection: string, queryObject: ObjectAny, optObject?: MongoIntFind): Promise<WithId<object>[] | null[]> {
+    /**
+     * 
+     * @param collection - The collection you want to operate with
+     * @param queryObject - queryObject as you would use with mongodb native driver
+     * @param optObject - ref to the def of MongoIntFind
+     * @returns 
+     */
+    async get<T>(collection: string, queryObject: ObjectAny, optObject?: MongoIntFind): Promise<WithId<T>[]> {
 
         let doSanitize: boolean = true
         if (optObject?.doSanitize !== undefined) doSanitize = optObject.doSanitize
         const safeObj = doSanitize ? sanitize(queryObject) : queryObject
 
-        let document: WithId<object>[] | null = [];
+        let document: WithId<T>[] = [];
 
         let cursor = this.client.db(this.db).collection(collection).find(safeObj, optObject)
         for await (let docu of cursor) {
-            document.push(docu)
+            document.push(docu as WithId<T>)
         }
         return document
     }
