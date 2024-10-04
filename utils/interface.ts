@@ -1,6 +1,7 @@
 // This file is responsible for interact with the MongoDB and redis, you may call it a wrapper or an interface
 import { Collection, type CollectionInfo, type DeleteResult, type InsertOneResult, MongoClient, ObjectId, type UpdateResult, type WithId } from 'mongodb'
 import type { MongoIntFind, ObjectAny } from '../type'
+import type { RedisClientType } from 'redis';
 
 export const sanitize = (object: ObjectAny) => {
     if (object instanceof Object) {
@@ -99,9 +100,9 @@ export class Dbi {
 }
 
 export class CDbi {
-    cdb: any
+    private cdb: RedisClientType<any>
 
-    constructor(cdb: any) {
+    constructor(cdb: RedisClientType<any>) {
         this.cdb = cdb
     }
     async write(set: string, key: string, value: string | number) {

@@ -7,6 +7,7 @@ import { Dbi, CDbi } from "./utils/interface";
 import { load_route } from "./utils/load_route";
 import { ip } from "elysia-ip";
 import { ObjectId } from "mongodb";
+import type { RedisClientType } from "redis";
 
 export class URN {
     debug: boolean
@@ -29,7 +30,7 @@ export class URN {
     }
     async cdb(url: string) {
         const client = await connectCache(url)
-        const cdbi = new CDbi(client)
+        const cdbi = new CDbi(client as RedisClientType<any>)
         return cdbi
     }
     async ignite(conf: ignObj, loader?: (server: Elysia) => any): Promise<Elysia> {
