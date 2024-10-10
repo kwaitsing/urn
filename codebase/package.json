@@ -8,16 +8,16 @@
   "peerDependencies": {
     "typescript": "^5.5.3"
   },
-  "version": "42.1.4",
-  "codename": "Nightwalk",
+  "version": "100.0.1",
+  "codename": "TwilightSaga",
   "dependencies": {
+    "@elysiajs/jwt": "^1.1.1",
     "@elysiajs/swagger": "latest",
     "databridge-pack": "latest",
     "elysia": "latest",
-    "elysia-ip": "latest",
+    "logestic": "^1.2.3",
     "minimist": "latest",
     "mongodb": "latest",
-    "redis": "latest",
-    "toolbx": "latest"
+    "redis": "latest"
   }
 }
