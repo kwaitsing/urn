@@ -5,7 +5,7 @@ export const load_route = (
   instance: AnyElysia,
   route: RuntimeRoute,
   routeDescs: string[],
-  gateway: ((...args: any[]) => MaybePromise<Result | any>),
+  gateway: ((...args: any[]) => Promise<any>),
   module_name: string,
   verbose: boolean = false
 ) => {
@@ -21,7 +21,12 @@ export const load_route = (
       // log this api access to the console
       const date = new Date()
       const timestamp = Math.floor(date.getTime() / 1000);
-      if (verbose) contents.logestic.debug(`${date.toLocaleString()} ${JSON.stringify(contents)}`);
+      if (verbose) {
+        const contentsForLog = JSON.parse(JSON.stringify(contents, (key, value) =>
+          typeof value === 'bigint' ? value.toString() : value
+        ))
+        contents.logestic.debug(`${date.toLocaleString()} ${JSON.stringify(contentsForLog)}`)
+      }
       // load route depends on its details~
       if (route.isDirect) {
         return await route.handler(contents)

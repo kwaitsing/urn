@@ -99,9 +99,10 @@ export class URN {
      * 
      * @param modules An array of modules
      * @param conflictCheck You wanna check for conflicted routes?
+     * @param gateway A function that acts as gateway
      * @param instance the Instance you wish to operate on, could be undefined if you wanna use the pervious created instance stored inside this Instance of URN
      */
-    async loadInstance(modules: Module[], conflictCheck: boolean = true, instance: AnyElysia | undefined = this.instance) {
+    async loadInstance(modules: Module[], conflictCheck: boolean = true, gateway: ((...args: any[]) => Promise<any>), instance: AnyElysia | undefined = this.instance) {
         if (!instance) throw new Error("Please call createInstance first");
         for (const module of modules) {
             let conflict: string[] | undefined
@@ -113,11 +114,11 @@ export class URN {
                     if (conflict) {
                         console.warn(`> URN/@loadInstance\n  Module Conflict detected at\n  ${module.name} <=> ${conflict[0]}\n  ${route.path}\n  You may want to handle this manually\n  This route has been dropped from this session`);
                     } else {
-                        load_route(instance, route, this.routeDescs, ((...args: any[]) => Promise<any>), module.name, this.newOpts.enableVerbose);
+                        load_route(instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
                     }
                 }
                 else {
-                    load_route(instance, route, this.routeDescs, ((...args: any[]) => Promise<any>), module.name, this.newOpts.enableVerbose);
+                    load_route(instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
                 }
             })
         }
