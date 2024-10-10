@@ -1,8 +1,15 @@
 // This file is responsible for interact with the MongoDB and redis, you may call it a wrapper or an interface
 import { Collection, type CollectionInfo, type DeleteResult, type InsertOneResult, MongoClient, ObjectId, type UpdateResult, type WithId } from 'mongodb'
-import type { MongoIntFind, ObjectAny } from '../type'
+import type { MongoIntFind, ObjectAny } from './type'
 import type { RedisClientType } from 'redis';
 
+/**
+ * 
+ * Sanitize an object for MongoDB interface
+ * 
+ * @param object data
+ * @returns safe data (**probably**)
+ */
 export const sanitize = (object: ObjectAny) => {
     if (object instanceof Object) {
         for (const key in object) {
@@ -26,10 +33,11 @@ export class Dbi {
     }
     /**
      * 
-     * @param collection - The collection you want to operate with
-     * @param object - the object you want to write
+     * Push a new document into your db
+     * 
+     * @param collection - The collection you wanna operate with
+     * @param object - the data
      * @param doSanitize - do Sanitize or not (true by default)
-     * @returns 
      */
     async add(collection: string, object: object, doSanitize: boolean = true): Promise<InsertOneResult> {
         const safeObj = doSanitize ? sanitize(object) : object
@@ -38,11 +46,12 @@ export class Dbi {
 
     /**
      * 
+     * Update a document inside ur db
+     * 
      * @param collection  - The collection you want to operate with
-     * @param objectID - remember to use toObjId() to ensure you're passing ObjectID
-     * @param updateObject - Object you want to update
+     * @param objectID - the ObjectId of that document **Has to be the correct type: ObjectId**
+     * @param updateObject - data
      * @param doSanitize - do Sanitize or not (true by default)
-     * @returns 
      */
     async upd(collection: string, objectID: ObjectId, updateObject: object, doSanitize: boolean = true): Promise<UpdateResult> {
         if (!ObjectId.isValid(objectID)) {
@@ -57,9 +66,10 @@ export class Dbi {
     }
     /**
      * 
-     * @param collection - The collection you want to operate with
-     * @param objectID - remember to use toObjId() to ensure you're passing ObjectID
-     * @returns 
+     * Remove a document from ur db
+     * 
+     * @param collection - The collection you wanna operate with
+     * @param objectID - the ObjectId of that document **Has to be the correct type: ObjectId**
      */
     async del(collection: string, objectID: ObjectId): Promise<DeleteResult> {
         if (!ObjectId.isValid(objectID)) {
@@ -69,10 +79,11 @@ export class Dbi {
     }
     /**
      * 
-     * @param collection - The collection you want to operate with
+     * Grab a document from ur db
+     * 
+     * @param collection - The collection you wanna operate with
      * @param queryObject - queryObject as you would use with mongodb native driver
      * @param optObject - ref to the def of MongoIntFind
-     * @returns 
      */
     async get<T>(collection: string, queryObject: ObjectAny, optObject?: MongoIntFind): Promise<WithId<T>[]> {
 
@@ -88,12 +99,29 @@ export class Dbi {
         }
         return document
     }
+    /**
+     * 
+     * Create a new collection inside your db
+     * 
+     * @param collection Name of the collection you wanna create
+     */
     async createCollection(collection: string): Promise<Collection<Document>> {
         return await this.client.db(this.db).createCollection(collection)
     }
+    /**
+     * 
+     * Grab a list of available collections inside ur db
+     * 
+     * @returns An array contains all collections in your db
+     */
     async getCollection(): Promise<(CollectionInfo | Pick<CollectionInfo, "name" | "type">)[]> {
         return await this.client.db(this.db).listCollections().toArray()
     }
+    /**
+     * 
+     * For some Pros, this is the real mongodb native driver interface
+     * 
+     */
     custom() {
         return this.client.db(this.db)
     }
