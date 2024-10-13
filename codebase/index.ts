@@ -137,8 +137,8 @@ export class URN {
      * 
     */
     igniteInstance(conf: Partial<Serve>, callback?: ListenCallback, instance: undefined | AnyElysia = this.instance) {
-        if (!this.instance) throw new Error("Please call createInstance first");
-        this.instance.listen(conf, callback);
+        if (!instance) throw new Error("Please call createInstance first");
+        instance.listen(conf, callback);
     }
 
 }
