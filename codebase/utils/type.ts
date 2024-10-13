@@ -1,4 +1,5 @@
-import { Elysia, t, type Context, type HTTPMethod, type MaybePromise, type Static, type TSchema } from "elysia"
+import type { Serve } from "bun"
+import { Elysia, t, type AnyElysia, type Context, type HTTPMethod, type MaybePromise, type Static, type TSchema } from "elysia"
 import type { FindOptions } from "mongodb"
 
 // Runtime Dependency
@@ -24,6 +25,15 @@ export interface MongoIntFind extends FindOptions {
     doSanitize?: boolean
 }
 
+
+export interface ObjectAny {
+    [key: string]: any
+}
+
+export type Sch2Ts<T extends TSchema> = Static<T>
+
+export type MRequestOPT<T> = RequestOPT & T
+
 // URN Dependency
 
 export interface InitOptType {
@@ -39,8 +49,4 @@ export interface Module {
     routes: RuntimeRoute[]
 }
 
-export interface ObjectAny {
-    [key: string]: any
-}
-
-export type Sch2Ts<T extends TSchema> = Static<T>
+export type IgniteConf = Partial<Serve>
