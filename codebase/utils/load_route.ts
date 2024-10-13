@@ -15,7 +15,7 @@ export const load_route = (
       tags: [module_name ? module_name : 'Uncataloged']
     }
   }
-  instance.route(route.method, route.path, async (contents: RequestOPT) => {
+  const newInstance = instance.route(route.method, route.path, async (contents: RequestOPT) => {
 
     try {
       // log this api access to the console
@@ -49,4 +49,5 @@ export const load_route = (
   }, hook)
   // Push back check string
   routeDescs.push(`${module_name}|${route.path}|${route.method}`)
+  return newInstance
 }

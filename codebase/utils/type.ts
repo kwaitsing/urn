@@ -1,4 +1,4 @@
-import { Elysia, type Context, type HTTPMethod, type MaybePromise } from "elysia"
+import { Elysia, t, type Context, type HTTPMethod, type MaybePromise, type Static, type TSchema } from "elysia"
 import type { FindOptions } from "mongodb"
 
 // Runtime Dependency
@@ -17,9 +17,6 @@ export interface RuntimeRoute {
     handler: ((...args: any[]) => MaybePromise<any>) // Either a async function or a default one
     tags?: string[]
     addon?: routeHook
-    [key: string]: any
-}
-export interface ObjectAny {
     [key: string]: any
 }
 
@@ -41,3 +38,9 @@ export interface Module {
     prefix?: string
     routes: RuntimeRoute[]
 }
+
+export interface ObjectAny {
+    [key: string]: any
+}
+
+export type Sch2Ts<T extends TSchema> = Static<T>
