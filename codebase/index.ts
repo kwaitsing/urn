@@ -3,7 +3,6 @@ import type { InitOptType, Module, RuntimeRoute } from "./utils/type";
 import { connectCache, connectDatabase } from "databridge-pack";
 import { Dbi, CDbi } from "./utils/interface";
 import { load_route } from "./utils/load_route";
-import { ObjectId } from "mongodb";
 import type { RedisClientType } from "redis";
 import { Logestic } from "logestic";
 import type { Serve } from "bun";
@@ -11,7 +10,7 @@ import type { Serve } from "bun";
 export class URN {
     private newOpts: InitOptType
     private routeDescs: string[] // 'ModuleName|Path|Method'
-    private instance: AnyElysia | undefined
+    instance: AnyElysia | undefined
 
     /**
      * 
@@ -88,7 +87,6 @@ export class URN {
     createInstance(InstanceConfigure?: ElysiaConfig<string, any>) {
         const instance = new Elysia(InstanceConfigure)
             .use(Logestic.preset('fancy'))
-        this.instance = instance
         return instance
     }
     /**
@@ -100,33 +98,32 @@ export class URN {
      * @param modules An array of modules
      * @param conflictCheck You wanna check for conflicted routes?
      * @param gateway A function that acts as gateway
-     * @param instance the Instance you wish to operate on, could be undefined if you wanna use the pervious created instance stored inside this Instance of URN
      * 
      * @returns Elysia Instance after the loading stage
-     *  e
+     *
      */
-    async loadInstance(modules: Module[], conflictCheck: boolean = true, gateway: ((...args: any[]) => Promise<any>), instance: AnyElysia | undefined = this.instance) {
-        if (!instance) throw new Error("Please call createInstance first");
+    loadInstance(modules: Module[], conflictCheck: boolean = true, gateway: ((...args: any[]) => Promise<any>)) {
+        if (!this.instance) throw new Error("Please call createInstance first");
         for (const module of modules) {
             let conflict: string[] | undefined
 
             module.routes.forEach((route: RuntimeRoute) => {
                 this.routeDescs.find(desc => desc.includes(`${route.path}|${route.method}`))?.split('|')
-                if (!instance) throw new Error("Please call createInstance first");
+                if (!this.instance) throw new Error("Please call createInstance first");
                 if (conflictCheck) {
                     if (conflict) {
                         console.warn(`> URN/@loadInstance\n  Module Conflict detected at\n  ${module.name} <=> ${conflict[0]}\n  ${route.path}\n  You may want to handle this manually\n  This route has been dropped from this session`);
                     } else {
-                        instance = load_route(instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
+                        this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
                     }
                 }
                 else {
-                    instance = load_route(instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
+                    this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
                 }
             })
         }
 
-        return instance
+        return this.instance
     }
     /**
      * 
@@ -136,24 +133,14 @@ export class URN {
      * 
      * @param conf Ignite Configuration
      * @param callback ListenCallback
-     * @param instance the Instance you wish to operate on, could be undefined if you wanna use the pervious created instance stored inside this Instance of URN
-     */
-    igniteInstance(conf: Partial<Serve>, callback?: ListenCallback, instance: AnyElysia | undefined = this.instance) {
-        if (!instance) throw new Error("Please call createInstance first");
-        instance.listen(conf, callback);
+     * @param instance Instance required to ignite, can be undefined
+     * 
+    */
+    igniteInstance(conf: Partial<Serve>, callback?: ListenCallback, instance: undefined | AnyElysia = this.instance) {
+        if (!this.instance) throw new Error("Please call createInstance first");
+        this.instance.listen(conf, callback);
     }
 
-}
-
-/**
- * 
- * Convert smth into ObjectId
- * 
- * @param input Any input works, as long as it can be used to create an ObjectId
- * @returns 
- */
-export const toObjId = (input: any): ObjectId => {
-    return new ObjectId(input)
 }
 
 export * from './utils/type'
