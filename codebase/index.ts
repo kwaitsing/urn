@@ -11,7 +11,6 @@ export class URN {
     private newOpts: InitOptType
     private routeDescs: string[] // 'ModuleName|Path|Method'
     instance: AnyElysia | undefined
-
     /**
      * 
      * Creating an URN instance (not an URN server instance)
@@ -84,7 +83,7 @@ export class URN {
      * @param InstanceConfigure Elysia Configuration, ref to https://elysiajs.com/patterns/configuration.html
      * @returns A prototype, loaded Elysia Instance
      */
-    createInstance(InstanceConfigure?: ElysiaConfig<string, any>) {
+    createInstance(InstanceConfigure?: ElysiaConfig<string, any> | ElysiaConfig<"", false>) {
         const instance = new Elysia(InstanceConfigure)
             .use(Logestic.preset('fancy'))
         return instance
@@ -114,11 +113,11 @@ export class URN {
                     if (conflict) {
                         console.warn(`> URN/@loadInstance\n  Module Conflict detected at\n  ${module.name} <=> ${conflict[0]}\n  ${route.path}\n  You may want to handle this manually\n  This route has been dropped from this session`);
                     } else {
-                        this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
+                        this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose, module.prefix);
                     }
                 }
                 else {
-                    this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose);
+                    this.instance = load_route(this.instance, route, this.routeDescs, gateway, module.name, this.newOpts.enableVerbose, module.prefix);
                 }
             })
         }

@@ -1,5 +1,5 @@
 import type { Serve } from "bun"
-import { Elysia, t, type AnyElysia, type Context, type HTTPMethod, type MaybePromise, type Static, type TSchema } from "elysia"
+import { type Elysia, type Context, type HTTPMethod, type MaybePromise, type Static, type TSchema } from "elysia"
 import type { FindOptions } from "mongodb"
 
 // Runtime Dependency
@@ -10,14 +10,14 @@ export interface Result {
 }
 
 export type RequestOPT = Context & Partial<Record<string, any>>
-export type routeHook = Partial<Parameters<Elysia['route']>[3]> & Partial<Record<string, any>>
+export type routeHook = Parameters<Elysia['route']>[3]
 export interface RuntimeRoute {
     method: HTTPMethod
     path: string
     isDirect: boolean
     handler: ((...args: any[]) => MaybePromise<any>) // Either a async function or a default one
     tags?: string[]
-    addon?: routeHook
+    addon?: Partial<routeHook> & Partial<Record<string, any>>
     [key: string]: any
 }
 
