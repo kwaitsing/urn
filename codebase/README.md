@@ -1,9 +1,12 @@
 ![banner](https://github.com/kwaitsing/urn/blob/main/arts/banner.png?raw=true)
 
-# urn
+# URN.ts NextGeneration
 
-🍔Aggressive backend framework with Unbeatable Efficiency, supercharged by bun.sh
+> Code more, less code
 
-(I couldn't find the bun emoji so i use a hamburger instead, after all, emoji is the npmjs spirit)
+URN.ts is a SDK/Framework built up-on Elysia.JS
 
-Read more at the [project site](https://urn.lolitapi.cyou)
+It provides user-friendly Database interface, pretty logger and a routing system ready-to-use
+
+Learn more at the [project site](https://urn.lolitapi.cyou)
+

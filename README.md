@@ -1,6 +1,6 @@
 ![banner](https://github.com/kwaitsing/urn/blob/main/arts/banner.png?raw=true)
 
-# URN.ts NextGeneration (TwilightSaga@100.0.1)
+# URN.ts NextGeneration (TwilightSaga@100.x.x)
 
 > Code more, less code
 
