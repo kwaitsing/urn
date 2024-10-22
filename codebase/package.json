@@ -8,7 +8,7 @@
   "peerDependencies": {
     "typescript": "latest"
   },
-  "version": "100.0.7",
+  "version": "100.0.8",
   "codename": "TwilightSaga",
   "dependencies": {
     "databridge-pack": "latest",
