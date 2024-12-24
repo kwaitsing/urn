@@ -12,7 +12,7 @@
   "codename": "TwilightSaga",
   "dependencies": {
     "databridge-pack": "latest",
-    "elysia": "latest",
+    "elysia": "1.1.26",
     "logestic": "latest",
     "minimist": "latest",
     "mongodb": "latest",
